@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+   <meta name="keywords" content="game, guess, colors">
+   <meta name="description" content="Color guessing game for everyone">
+   <meta name="author" content="Beata Slowik">
+   <title>Color guessing game</title>
+
+   <script>
+      var colors = ["blue", "cyan", "DarkSeaGreen", "gold", "gray", "green", "magenta", "orange", "red", "yellow", "Crimson", "DeepPink"];
+      var target, user_guess;
+      var counter = 0;
+
+      // == DO GAME
+      function do_game() {
+         colors = colors.sort(
+            function(item1, item2) {
+               var item1_lower = item1.toLowerCase();
+               var item2_lower = item2.toLowerCase();
+               return item1_lower < item2_lower ? -1 : item1_lower > item2_lower ? 1 : 0;
+            });
+         var colors_to_display = colors.map(
+            function(element, index) {
+               if (index == 0) {
+                  return element
+               }
+               return " " + element;
+            }
+         );
+         target = colors[generate_number()];
+         alert(target);
+         do {
+            user_guess = prompt("I am thinking of one of these colors:\n\n" + colors_to_display + "\n\nWhat color am I thinking of?");
+            counter++
+         } while (user_guess != null && !check_guess())
+      }
+
+      // == GENERATE NUMBER
+      function generate_number() {
+         var random_number = Math.floor(Math.random() * colors.length);
+         return random_number;
+      }
+
+      // ==CHECK GUESS
+      function check_guess() {
+         user_guess = user_guess.toLowerCase();
+         target = target.toLowerCase();
+         if (if_not_in_colors()) {
+            alert("Sorry, I don't recognize your color.\n\nPlease try again.")
+            return false;
+         } else if (user_guess > target) {
+            alert("Sorry, your guess is not correct!\n\n Hint: your color is alphabetically higher than mine\n\nPlease try again.");
+            return false;
+         } else if (user_guess < target) {
+            alert("Sorry, your guess is not correct!\n\n Hint: your color is alphabetically lower than mine\n\nPlease try again.");
+            return false;
+         } else {
+            document.body.style.backgroundColor = user_guess;
+            alert("Congratulations! You have guessed the color!\n\nIt took you " + counter + " guesses!\n\n You can see the color in the background");
+            return true;
+         }
+      }
+
+      // ==CHECK IF USER INPUT IS A COLOR FROM ARRAY
+      function if_not_in_colors() {
+         var not_color = true;
+         var i = 0;
+         while (i < colors.length) {
+            if (user_guess.toLowerCase() == colors[i].toLowerCase()) {
+               not_color = false;
+               break;
+            }
+            i++
+         }
+         return not_color;
+      }
+   </script>
+
+</head>
+
+<body onload="do_game();">
+
+</body>
+
+</html>
